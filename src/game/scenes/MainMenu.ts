@@ -3,6 +3,12 @@ import { GameObjects, Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { config } from "../main";
 
+export const MainMenuAssetManifest = {
+    playButton: {
+        path: "menu/play.png",
+    },
+};
+
 export class MainMenu extends Scene {
     background: GameObjects.Image;
 
@@ -12,9 +18,15 @@ export class MainMenu extends Scene {
 
     create() {
         this.background = this.add.image(
-            Number.parseFloat((config.width ?? 0).toString()) / 2,
-            Number.parseFloat((config.height ?? 0).toString()) / 2,
+            config.width / 2,
+            config.height / 2,
             "background"
+        );
+
+        const playButtonSprite: GameObjects.Sprite = this.add.sprite(
+            config.width / 2,
+            config.height / 2,
+            MainMenuAssetManifest.playButton.path
         );
 
         EventBus.emit("current-scene-ready", this);
