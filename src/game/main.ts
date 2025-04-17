@@ -18,6 +18,7 @@ const gameConfig: Phaser.Types.Core.GameConfig = {
     height: config.height,
     parent: "game-container",
     backgroundColor: "#000000",
+    canvasStyle: "border: 2px white solid;",
     scene: [Boot, Preloader, MainMenu, MainGame, GameOver],
 };
 
