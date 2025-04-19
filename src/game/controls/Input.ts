@@ -9,8 +9,9 @@ export type InputCoords = {
 
 export type InputMode = "PC" | "MOBILE";
 
-export class Input {
+export class InputState {
     private _moveTo: InputCoords = { x: 0, y: 0 };
+    private _isAccelerating: boolean = false;
     private _firing: boolean = false;
     private _inputSource: IInput;
 
@@ -26,21 +27,36 @@ export class Input {
         return this._moveTo.y;
     }
 
-    public constructor(inputMode: InputMode) {
-        if (inputMode === "PC") {
-            this._inputSource = new PcInput(
-                this._updatePosition,
-                this._updateFiring
-            );
-        } else {
-            this._inputSource = new MobileInput(
-                this._updatePosition,
-                this._updateFiring
-            );
-        }
+    get isAccelerating() {
+        return this._isAccelerating;
     }
 
-    private _updatePosition(inputCoords: InputCoords) {}
+    public constructor(
+        inputMode: InputMode,
+        inputPlugin: Phaser.Input.InputPlugin
+    ) {
+        if (inputMode === "PC") {
+            this._inputSource = new PcInput();
+        } else if (inputMode === "MOBILE") {
+            this._inputSource = new MobileInput();
+        }
 
-    private _updateFiring() {}
+        this._inputSource.updateMoveTarget = this._updateMoveTarget;
+        this._inputSource.onFiringInput = this._updateFiring;
+        this._inputSource.inputPlugin = inputPlugin;
+        this._inputSource.ready();
+    }
+
+    private _updateMoveTarget(
+        inputCoords: InputCoords,
+        isAccelerating: boolean
+    ) {
+        this._moveTo.x = inputCoords.x;
+        this._moveTo.y = inputCoords.y;
+        this._isAccelerating = isAccelerating;
+    }
+
+    private _updateFiring(firing: boolean) {
+        this._firing = firing;
+    }
 }

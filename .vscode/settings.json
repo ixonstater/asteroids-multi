@@ -1,6 +1,9 @@
 {
     "editor.formatOnSave": true,
-    "cSpell.words": [
-        "spritesheet"
-    ]
+    "cSpell.words": ["spritesheet"],
+    "[typescript]": {
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+        }
+    }
 }
