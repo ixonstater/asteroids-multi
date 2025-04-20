@@ -1,7 +1,7 @@
-import { InputCoords } from "./Input";
+import { Coords } from "./Input";
 
 export type PositionInputHandler = (
-    inputCoords: InputCoords,
+    inputCoords: Coords,
     isAccelerating: boolean
 ) => void;
 export type FiringInputHandler = (firing: boolean) => void;

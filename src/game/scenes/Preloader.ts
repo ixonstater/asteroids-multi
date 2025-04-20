@@ -22,6 +22,9 @@ export class Preloader extends Scene {
                 frameHeight: 90,
             }
         );
+        for (const path of MainMenuAssetManifest.shipAssets.paths) {
+            this.load.image(path, path);
+        }
     }
 
     create() {

@@ -7,21 +7,28 @@ export const MainMenuAssetManifest = {
     playButton: {
         path: "menu/play.png",
     },
+    shipAssets: {
+        paths: [
+            "ship_red.png",
+            "ship_green.png",
+            "ship_magenta.png",
+            "ship_pink.png",
+            "ship_yellow.png",
+            "ship_blue.png",
+        ],
+    },
 };
 
 export class MainMenu extends Scene {
-    background: GameObjects.Image;
+    private _shipColorPath: string = "ship_red.png";
+    private _selectedShipRectangle?: Phaser.GameObjects.Rectangle;
 
     constructor() {
         super("MainMenu");
     }
 
     create() {
-        this.background = this.add.image(
-            config.width / 2,
-            config.height / 2,
-            "background"
-        );
+        this.add.image(config.width / 2, config.height / 2, "background");
 
         const title = this.add.text(0, 80, "Asteroids but with friends lol :p");
         title.x = config.width / 2 - title.displayWidth / 2;
@@ -31,12 +38,61 @@ export class MainMenu extends Scene {
             config.height / 2,
             MainMenuAssetManifest.playButton.path
         );
-        this.setupPlayButton(playButtonSprite);
+        this._setupPlayButton(playButtonSprite);
+        this._setupShipSelect();
 
         EventBus.emit("current-scene-ready", this);
     }
 
-    setupPlayButton(playButton: GameObjects.Sprite) {
+    private _setupShipSelect() {
+        const shipIconPositionY = config.height / 2 + 115;
+        const shipIconStartPositionX = 200;
+        const shipIconIncrement =
+            (config.width - shipIconStartPositionX * 2) /
+            (MainMenuAssetManifest.shipAssets.paths.length - 1);
+
+        for (
+            let i = 0;
+            i < MainMenuAssetManifest.shipAssets.paths.length;
+            i++
+        ) {
+            const shipImagePath = MainMenuAssetManifest.shipAssets.paths[i];
+            const shipCenterX = shipIconStartPositionX + shipIconIncrement * i;
+            const shipImage = this.add.image(
+                shipCenterX,
+                shipIconPositionY,
+                shipImagePath
+            );
+
+            shipImage
+                .setInteractive()
+                .on("pointerdown", () =>
+                    this._selectShipColor(shipImagePath, shipImage)
+                )
+                .setScale(0.5, 0.5)
+                .setRotation(Math.PI / 2)
+                .setDepth(1);
+        }
+    }
+
+    private _selectShipColor(color: string, ship: GameObjects.Image) {
+        this._shipColorPath = color;
+
+        if (!this._selectedShipRectangle) {
+            this._selectedShipRectangle = this.add.rectangle(
+                ship.x,
+                ship.y,
+                ship.displayWidth + 20,
+                ship.displayHeight + 20,
+                0x222222
+            );
+        } else {
+            this._selectedShipRectangle.x = ship.x;
+            this._selectedShipRectangle.y = ship.y;
+        }
+    }
+
+    private _setupPlayButton(playButton: GameObjects.Sprite) {
         playButton
             .setInteractive()
             .on("pointerdown", () => {
@@ -44,12 +100,12 @@ export class MainMenu extends Scene {
             })
             .on("pointerup", () => {
                 playButton.setFrame(0);
-                this.changeScene();
+                this._changeScene();
             });
     }
 
-    changeScene() {
-        this.scene.start("Game");
+    private _changeScene() {
+        this.scene.start("Game", { selectedShipPath: this._shipColorPath });
     }
 }
 

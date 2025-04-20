@@ -2,7 +2,7 @@ import { IInput } from "./IInput";
 import { MobileInput } from "./MobileInput";
 import { PcInput } from "./PcInput";
 
-export type InputCoords = {
+export type Coords = {
     x: number;
     y: number;
 };
@@ -10,7 +10,7 @@ export type InputCoords = {
 export type InputMode = "PC" | "MOBILE";
 
 export class InputState {
-    private _moveTo: InputCoords = { x: 0, y: 0 };
+    private _moveTo: Coords = { x: 0, y: 0 };
     private _isAccelerating: boolean = false;
     private _firing: boolean = false;
     private _inputSource: IInput;
@@ -47,10 +47,7 @@ export class InputState {
         this._inputSource.ready();
     }
 
-    private _updateMoveTarget(
-        inputCoords: InputCoords,
-        isAccelerating: boolean
-    ) {
+    private _updateMoveTarget(inputCoords: Coords, isAccelerating: boolean) {
         console.log(inputCoords);
         this._moveTo.x = inputCoords.x;
         this._moveTo.y = inputCoords.y;
