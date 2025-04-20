@@ -7,7 +7,7 @@ import { Preloader } from "./scenes/Preloader";
 
 export const config = {
     width: 750,
-    height: 750,
+    height: 400,
     isMobile: navigator.maxTouchPoints > 1,
 };
 

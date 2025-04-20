@@ -41,8 +41,8 @@ export class InputState {
             this._inputSource = new MobileInput();
         }
 
-        this._inputSource.updateMoveTarget = this._updateMoveTarget;
-        this._inputSource.onFiringInput = this._updateFiring;
+        this._inputSource.updateMoveTarget = this._updateMoveTarget.bind(this);
+        this._inputSource.onFiringInput = this._updateFiring.bind(this);
         this._inputSource.inputPlugin = inputPlugin;
         this._inputSource.ready();
     }
@@ -51,6 +51,7 @@ export class InputState {
         inputCoords: InputCoords,
         isAccelerating: boolean
     ) {
+        console.log(inputCoords);
         this._moveTo.x = inputCoords.x;
         this._moveTo.y = inputCoords.y;
         this._isAccelerating = isAccelerating;

@@ -23,11 +23,7 @@ export class MainMenu extends Scene {
             "background"
         );
 
-        const title = this.add.text(
-            0,
-            150,
-            "Asteroids but with friends lol :p"
-        );
+        const title = this.add.text(0, 80, "Asteroids but with friends lol :p");
         title.x = config.width / 2 - title.displayWidth / 2;
 
         const playButtonSprite: GameObjects.Sprite = this.add.sprite(
