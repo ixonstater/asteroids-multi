@@ -43,11 +43,13 @@ export class InputState {
     }
 
     private _updateMoveTarget(
-        inputCoords: Phaser.Math.Vector2,
-        isAccelerating: boolean
+        isAccelerating: boolean,
+        inputCoords?: Phaser.Math.Vector2
     ) {
-        this._moveTo.x = inputCoords.x;
-        this._moveTo.y = inputCoords.y;
+        if (inputCoords) {
+            this._moveTo.x = inputCoords.x;
+            this._moveTo.y = inputCoords.y;
+        }
         this._isAccelerating = isAccelerating;
     }
 

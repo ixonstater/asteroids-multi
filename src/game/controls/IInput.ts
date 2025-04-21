@@ -1,6 +1,6 @@
 export type PositionInputHandler = (
-    inputCoords: Phaser.Math.Vector2,
-    isAccelerating: boolean
+    isAccelerating: boolean,
+    inputCoords?: Phaser.Math.Vector2
 ) => void;
 export type FiringInputHandler = (firing: boolean) => void;
 

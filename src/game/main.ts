@@ -21,6 +21,8 @@ const gameConfig: Phaser.Types.Core.GameConfig = {
     backgroundColor: "#000000",
     canvasStyle: "border: 2px white solid;",
     scene: [Boot, Preloader, MainMenu, MainGame, GameOver],
+    antialias: true,
+    antialiasGL: true,
 };
 
 const StartGame = (parent: string) => {
