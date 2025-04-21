@@ -1,7 +1,5 @@
-import { Coords } from "./Input";
-
 export type PositionInputHandler = (
-    inputCoords: Coords,
+    inputCoords: Phaser.Math.Vector2,
     isAccelerating: boolean
 ) => void;
 export type FiringInputHandler = (firing: boolean) => void;

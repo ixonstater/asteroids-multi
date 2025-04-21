@@ -2,15 +2,10 @@ import { IInput } from "./IInput";
 import { MobileInput } from "./MobileInput";
 import { PcInput } from "./PcInput";
 
-export type Coords = {
-    x: number;
-    y: number;
-};
-
 export type InputMode = "PC" | "MOBILE";
 
 export class InputState {
-    private _moveTo: Coords = { x: 0, y: 0 };
+    private _moveTo: Phaser.Math.Vector2 = new Phaser.Math.Vector2(0, 0);
     private _isAccelerating: boolean = false;
     private _firing: boolean = false;
     private _inputSource: IInput;
@@ -47,8 +42,10 @@ export class InputState {
         this._inputSource.ready();
     }
 
-    private _updateMoveTarget(inputCoords: Coords, isAccelerating: boolean) {
-        console.log(inputCoords);
+    private _updateMoveTarget(
+        inputCoords: Phaser.Math.Vector2,
+        isAccelerating: boolean
+    ) {
         this._moveTo.x = inputCoords.x;
         this._moveTo.y = inputCoords.y;
         this._isAccelerating = isAccelerating;

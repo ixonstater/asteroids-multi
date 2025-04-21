@@ -2,6 +2,7 @@ import { GameObjects, Scene } from "phaser";
 
 import { EventBus } from "../EventBus";
 import { config } from "../main";
+import { InitGameData } from "./Game";
 
 export const MainMenuAssetManifest = {
     playButton: {
@@ -33,11 +34,13 @@ export class MainMenu extends Scene {
         const title = this.add.text(0, 80, "Asteroids but with friends lol :p");
         title.x = config.width / 2 - title.displayWidth / 2;
 
-        const playButtonSprite: GameObjects.Sprite = this.add.sprite(
-            config.width / 2,
-            config.height / 2,
-            MainMenuAssetManifest.playButton.path
-        );
+        const playButtonSprite: GameObjects.Sprite = this.add
+            .sprite(
+                config.width / 2,
+                config.height / 2,
+                MainMenuAssetManifest.playButton.path
+            )
+            .setScale(0.7, 0.7);
         this._setupPlayButton(playButtonSprite);
         this._setupShipSelect();
 
@@ -105,7 +108,8 @@ export class MainMenu extends Scene {
     }
 
     private _changeScene() {
-        this.scene.start("Game", { selectedShipPath: this._shipColorPath });
+        const data: InitGameData = { selectedShipPath: this._shipColorPath };
+        this.scene.start("Game", data);
     }
 }
 
