@@ -10,7 +10,7 @@ export class Ship {
     private _velocity: Phaser.Math.Vector2 = new Phaser.Math.Vector2();
     private _maxVelocity: number = 3;
     private _ship: Phaser.GameObjects.Image;
-    private static _acceleration = 0.01;
+    private static _acceleration = 0.00002;
     private static _baseRotation = Math.PI / 2;
 
     public constructor(
@@ -24,11 +24,33 @@ export class Ship {
             .setScale(0.3, 0.3);
     }
 
-    public update(time: number, delta: number) {
-        this._facingDirection.x = this._inputState.moveToX - this._ship.x;
-        this._facingDirection.y = this._inputState.moveToY - this._ship.y;
-        this._ship.setRotation(
-            this._facingDirection.angle() + Ship._baseRotation
+    public update(_: number, delta: number) {
+        // Don't change rotation unless the ship is accelerating
+        if (this._inputState.isAccelerating) {
+            this._facingDirection.x = this._inputState.moveToX - this._ship.x;
+            this._facingDirection.y = this._inputState.moveToY - this._ship.y;
+            this._ship.setRotation(
+                this._facingDirection.angle() + Ship._baseRotation
+            );
+        }
+
+        const newVelocity = new Phaser.Math.Vector2(
+            Ship._acceleration * delta * this._facingDirection.x +
+                this._velocity.x,
+            Ship._acceleration * delta * this._facingDirection.y +
+                this._velocity.y
         );
+        const currentVelocityMagnitude = this._velocity.length();
+
+        if (
+            (currentVelocityMagnitude < this._maxVelocity ||
+                newVelocity.length() < currentVelocityMagnitude) &&
+            this._inputState.isAccelerating
+        ) {
+            this._velocity = newVelocity;
+        }
+
+        this._ship.x += this._velocity.x;
+        this._ship.y += this._velocity.y;
     }
 }
