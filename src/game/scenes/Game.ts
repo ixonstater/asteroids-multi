@@ -48,12 +48,15 @@ export class Game extends Scene {
             this
         );
 
+        this._asteroidManager = new AsteroidManager()
+
         EventBus.emit("current-scene-ready", this);
     }
 
     public override update(time: number, delta: number) {
         this._ship.update(time, delta);
         this._bulletManager.update(time, delta);
+        this._asteroidManager.update(time, delta);
     }
 
     public changeScene() {

@@ -14,11 +14,21 @@ export class AsteroidManager {
     private _ownedAsteroids: Map<number, Asteroid> = new Map();
     private _asteroids: Map<number, Asteroid> = new Map();
     private _spawner: AsteroidSpawner;
+
+    public update(time: number, delta: number) {
+        if (this._asteroids.size < 1) {
+            this._spawner.beginSpawnEvent()
+        }
+    }
 }
 
+// Eventually most of this classes functionality will be moved to the server
 export class AsteroidSpawner {
 
-    public spawnAsteroids() { }
+    public async beginSpawnEvent() {
+        // Show asteroids portal here
+        // Set timeout and then spawn asteroids
+    }
 
     private _pickSpawnLocation() { }
 
