@@ -1,6 +1,6 @@
 import { Scene } from "phaser";
 import { InputState } from "../controls/Input";
-import { Ship, ShipAssetManifest } from "./Ship";
+import { Ship, ShipAssetManifest } from "../ship/Ship";
 
 export class BulletManager {
     // Bullets to display, owned and foreign
@@ -16,7 +16,7 @@ export class BulletManager {
         private _scene: Scene
     ) {}
 
-    private _addBullet(time: number, delta: number) {
+    private _addBullet(time: number, _: number) {
         const bullet = new Bullet(
             time,
             this._ship.direction.normalize(),

@@ -1,8 +1,8 @@
 import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { InputState } from "../controls/Input";
+import { BulletManager } from "../entities/Bullet";
 import { config } from "../main";
-import { BulletManager } from "../ship/Bullet";
 import { Ship } from "../ship/Ship";
 
 export type InitGameData = {
