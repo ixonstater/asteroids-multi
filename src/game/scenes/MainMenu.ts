@@ -2,21 +2,12 @@ import { GameObjects, Scene } from "phaser";
 
 import { EventBus } from "../EventBus";
 import { config } from "../main";
+import { ShipAssetManifest } from "../ship/Ship";
 import { InitGameData } from "./Game";
 
 export const MainMenuAssetManifest = {
     playButton: {
         path: "menu/play.png",
-    },
-    shipAssets: {
-        paths: [
-            "ship_red.png",
-            "ship_green.png",
-            "ship_magenta.png",
-            "ship_pink.png",
-            "ship_yellow.png",
-            "ship_blue.png",
-        ],
     },
 };
 
@@ -52,14 +43,10 @@ export class MainMenu extends Scene {
         const shipIconStartPositionX = 200;
         const shipIconIncrement =
             (config.width - shipIconStartPositionX * 2) /
-            (MainMenuAssetManifest.shipAssets.paths.length - 1);
+            (ShipAssetManifest.shipAssets.paths.length - 1);
 
-        for (
-            let i = 0;
-            i < MainMenuAssetManifest.shipAssets.paths.length;
-            i++
-        ) {
-            const shipImagePath = MainMenuAssetManifest.shipAssets.paths[i];
+        for (let i = 0; i < ShipAssetManifest.shipAssets.paths.length; i++) {
+            const shipImagePath = ShipAssetManifest.shipAssets.paths[i];
             const shipCenterX = shipIconStartPositionX + shipIconIncrement * i;
             const shipImage = this.add.image(
                 shipCenterX,

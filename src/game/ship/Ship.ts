@@ -2,15 +2,33 @@ import { Scene } from "phaser";
 import { InputState } from "../controls/Input";
 import { config } from "../main";
 
+export const ShipAssetManifest = {
+    shipAssets: {
+        paths: [
+            "ship_red.png",
+            "ship_green.png",
+            "ship_magenta.png",
+            "ship_pink.png",
+            "ship_yellow.png",
+            "ship_blue.png",
+        ],
+    },
+    bulletAsset: {
+        path: "bullet.png",
+    },
+};
+
 export class Ship {
+    // Unit vector for spawn direction
     private _facingDirection: Phaser.Math.Vector2 = new Phaser.Math.Vector2(
-        0,
+        1,
         0
     );
     private _velocity: Phaser.Math.Vector2 = new Phaser.Math.Vector2();
     private _maxVelocity: number = 3;
     private _ship: Phaser.GameObjects.Image;
     private static _acceleration = 0.00002;
+    private static _velocityDeltaReducer = 0.09;
     private static _baseRotation = Math.PI / 2;
 
     public constructor(
@@ -22,6 +40,14 @@ export class Ship {
             .image(config.width / 2, config.height / 2, this._shipImagePath)
             .setRotation(Ship._baseRotation)
             .setScale(0.3, 0.3);
+    }
+
+    public get direction() {
+        return new Phaser.Math.Vector2().copy(this._facingDirection);
+    }
+
+    public get position() {
+        return new Phaser.Math.Vector2(this._ship.x, this._ship.y);
     }
 
     public update(_: number, delta: number) {
@@ -50,7 +76,7 @@ export class Ship {
             this._velocity = newVelocity;
         }
 
-        this._ship.x += this._velocity.x;
-        this._ship.y += this._velocity.y;
+        this._ship.x += this._velocity.x * delta * Ship._velocityDeltaReducer;
+        this._ship.y += this._velocity.y * delta * Ship._velocityDeltaReducer;
     }
 }
