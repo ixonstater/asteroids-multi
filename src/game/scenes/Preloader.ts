@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import { AsteroidAssetManifest } from "../entities/Asteroid";
 import { ShipAssetManifest } from "../ship/Ship";
 import { MainMenuAssetManifest } from "./MainMenu";
 
@@ -21,13 +22,19 @@ export class Preloader extends Scene {
                 frameHeight: 90,
             }
         );
+
         for (const path of ShipAssetManifest.shipAssets.paths) {
             this.load.image(path, path);
         }
+
         this.load.image(
             ShipAssetManifest.bulletAsset.path,
             ShipAssetManifest.bulletAsset.path
         );
+
+        for (const path of AsteroidAssetManifest.paths) {
+            this.load.image(path, path);
+        }
     }
 
     create() {

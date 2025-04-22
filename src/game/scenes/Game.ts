@@ -1,6 +1,7 @@
 import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { InputState } from "../controls/Input";
+import { AsteroidManager } from "../entities/Asteroid";
 import { BulletManager } from "../entities/Bullet";
 import { config } from "../main";
 import { Ship } from "../ship/Ship";
@@ -15,6 +16,7 @@ export class Game extends Scene {
 
     private _ship: Ship;
     private _bulletManager: BulletManager;
+    private _asteroidManager: AsteroidManager;
     private _data: InitGameData;
 
     constructor() {

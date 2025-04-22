@@ -9,7 +9,7 @@ export class BulletManager {
     private _bullets: Map<number, Bullet> = new Map();
     // Bullets to check for collision / delete
     private _ownedBullets: Map<number, Bullet> = new Map();
-    private _lastBulletAdded: number = 0;
+    private _lastBulletAddedTime: number = 0;
     private static bulletAddMinimumInterval: number = 150;
 
     public constructor(
@@ -31,12 +31,12 @@ export class BulletManager {
 
     public update(time: number, delta: number) {
         if (
-            time - this._lastBulletAdded >
+            time - this._lastBulletAddedTime >
             BulletManager.bulletAddMinimumInterval &&
             this._inputState.firing
         ) {
             this._addBullet(time, delta);
-            this._lastBulletAdded = time;
+            this._lastBulletAddedTime = time;
         }
 
         for (const [bulletId, bullet] of this._bullets.entries()) {
