@@ -1,12 +1,14 @@
 import { Scene } from "phaser";
 import { InputState } from "../controls/Input";
+import { config } from "../main";
 import { Ship, ShipAssetManifest } from "../ship/Ship";
 
 export class BulletManager {
+    private _bulletIdCount = 0;
     // Bullets to display, owned and foreign
-    private _bullets: Array<Bullet> = [];
+    private _bullets: Map<number, Bullet> = new Map();
     // Bullets to check for collision / delete
-    private _ownedBullets: Array<Bullet> = [];
+    private _ownedBullets: Map<number, Bullet> = new Map();
     private _lastBulletAdded: number = 0;
     private static bulletAddMinimumInterval: number = 150;
 
@@ -14,7 +16,7 @@ export class BulletManager {
         private _inputState: InputState,
         private _ship: Ship,
         private _scene: Scene
-    ) {}
+    ) { }
 
     private _addBullet(time: number, _: number) {
         const bullet = new Bullet(
@@ -23,21 +25,28 @@ export class BulletManager {
             this._ship.position,
             this._scene
         );
-        this._bullets.push(bullet);
-        this._ownedBullets.push(bullet);
+        this._bullets.set(this._bulletIdCount, bullet);
+        this._ownedBullets.set(this._bulletIdCount++, bullet);
     }
 
     public update(time: number, delta: number) {
         if (
             time - this._lastBulletAdded >
-                BulletManager.bulletAddMinimumInterval &&
+            BulletManager.bulletAddMinimumInterval &&
             this._inputState.firing
         ) {
             this._addBullet(time, delta);
             this._lastBulletAdded = time;
         }
 
-        for (const bullet of this._bullets) {
+        for (const [bulletId, bullet] of this._bullets.entries()) {
+            if (bullet.position.length() > config.width * 2) {
+                bullet.discard()
+                this._ownedBullets.delete(bulletId);
+                this._bullets.delete(bulletId)
+                continue
+            }
+
             bullet.update(time, delta);
         }
     }
@@ -48,6 +57,10 @@ class Bullet {
     private static _baseRotation = Math.PI / 2;
     private _bulletVelocity = 0.4;
     private static _spawnForwardOffset = 3;
+
+    public get position() {
+        return new Phaser.Math.Vector2(this._bullet.x, this._bullet.y);
+    }
 
     constructor(
         private _spawnTime: number,
@@ -77,11 +90,15 @@ class Bullet {
         this._bullet
             .setX(
                 this._startPosition.x +
-                    timeDifferential * this._bulletVelocity * this._direction.x
+                timeDifferential * this._bulletVelocity * this._direction.x
             )
             .setY(
                 this._startPosition.y +
-                    timeDifferential * this._bulletVelocity * this._direction.y
+                timeDifferential * this._bulletVelocity * this._direction.y
             );
+    }
+
+    public discard() {
+        this._bullet.destroy();
     }
 }
