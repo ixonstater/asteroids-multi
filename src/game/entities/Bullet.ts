@@ -16,7 +16,7 @@ export class BulletManager {
         private _inputState: InputState,
         private _ship: Ship,
         private _scene: Scene
-    ) { }
+    ) {}
 
     private _addBullet(time: number, _: number) {
         const bullet = new Bullet(
@@ -32,7 +32,7 @@ export class BulletManager {
     public update(time: number, delta: number) {
         if (
             time - this._lastBulletAddedTime >
-            BulletManager.bulletAddMinimumInterval &&
+                BulletManager.bulletAddMinimumInterval &&
             this._inputState.firing
         ) {
             this._addBullet(time, delta);
@@ -41,10 +41,10 @@ export class BulletManager {
 
         for (const [bulletId, bullet] of this._bullets.entries()) {
             if (bullet.position.length() > config.width * 2) {
-                bullet.discard()
+                bullet.discard();
                 this._ownedBullets.delete(bulletId);
-                this._bullets.delete(bulletId)
-                continue
+                this._bullets.delete(bulletId);
+                continue;
             }
 
             bullet.update(time, delta);
@@ -90,11 +90,11 @@ class Bullet {
         this._bullet
             .setX(
                 this._startPosition.x +
-                timeDifferential * this._bulletVelocity * this._direction.x
+                    timeDifferential * this._bulletVelocity * this._direction.x
             )
             .setY(
                 this._startPosition.y +
-                timeDifferential * this._bulletVelocity * this._direction.y
+                    timeDifferential * this._bulletVelocity * this._direction.y
             );
     }
 
