@@ -12,53 +12,79 @@ export const AsteroidAssetManifest = {
 
 export class AsteroidManager {
     private _asteroidIdCount: number = 0;
-    private _ownedAsteroids: Map<number, Asteroid> = new Map();
     private _asteroids: Map<number, Asteroid> = new Map();
     private _portal: Phaser.GameObjects.Ellipse;
     private _spawner: AsteroidSpawner;
-    public static maxVelocity: number = 3;
+    private _asteroidSpawnEventComplete: boolean = true;
+    private _asteroidSpawnEventStartTime: number = 0;
+    private __asteroidSpawnEventDuration: number = 6000;
+    public static maxVelocity: number = 0.2;
 
     public constructor(scene: Scene) {
         this._spawner = new AsteroidSpawner();
-        this._portal = new Phaser.GameObjects.Ellipse(
-            scene,
-            0,
-            0,
-            100,
-            100,
-            0x0000ff
-        ).setVisible(false);
+        this._portal = scene.add
+            .ellipse(0, 0, 100, 100, 0x0000ff)
+            .setVisible(false);
     }
 
     public update(time: number, delta: number, scene: Scene) {
-        if (this._asteroids.size < 1) {
-            const [asteroids, portalLocation] =
-                this._spawner.createAsteroids(scene);
+        // Start spawning new asteroids
+        if (this._asteroids.size < 1 && this._asteroidSpawnEventComplete) {
+            const [asteroids, portalLocation] = this._spawner.createAsteroids(
+                scene,
+                time
+            );
             this._portal.x = portalLocation.x;
             this._portal.y = portalLocation.y;
             this._portal.setVisible(true);
 
-            setTimeout(() => {
-                for (const asteroid of asteroids) {
-                }
-            }, 5000);
+            for (const asteroid of asteroids) {
+                this._asteroids.set(this._asteroidIdCount++, asteroid);
+            }
+
+            this._asteroidSpawnEventStartTime = time;
+            this._asteroidSpawnEventComplete = false;
+        }
+        // Update existing asteroids
+        else if (this._asteroidSpawnEventComplete) {
+            for (const [_, asteroid] of this._asteroids.entries()) {
+                asteroid.update(time, delta);
+            }
+        }
+        // Finish spawning new asteroids
+        else if (
+            !this._asteroidSpawnEventComplete &&
+            time >
+                this._asteroidSpawnEventStartTime +
+                    this.__asteroidSpawnEventDuration
+        ) {
+            this._portal.setVisible(false);
+            for (const asteroid of this._asteroids.values()) {
+                asteroid.startTime = time;
+                asteroid.setVisible(true);
+            }
+            this._asteroidSpawnEventComplete = true;
         }
     }
 }
 
 // Eventually most of this classes functionality will be moved to the server
 export class AsteroidSpawner {
-    private _level: number = 0;
+    private _level: number = 3;
 
     public createAsteroids(
-        scene: Scene
+        scene: Scene,
+        time: number
     ): [Array<Asteroid>, Phaser.Math.Vector2] {
         const portalLocation = this._pickPortalLocation();
         const asteroids: Array<Asteroid> = [];
 
-        for (let i = 0; i < ++this._level; i++) {
+        for (let i = 0; i < this._level; i++) {
             const velocity = this._getRandomVelocity();
-            const asteroidImage = this._getRandomAsteroidImage(scene);
+            const asteroidImage = this._getRandomAsteroidImage(
+                scene,
+                portalLocation
+            );
             asteroids.push(
                 new Asteroid(
                     asteroidImage,
@@ -68,6 +94,8 @@ export class AsteroidSpawner {
                 )
             );
         }
+
+        this._level++;
 
         return [asteroids, portalLocation];
     }
@@ -81,16 +109,22 @@ export class AsteroidSpawner {
 
     private _getRandomVelocity(): Phaser.Math.Vector2 {
         return new Phaser.Math.Vector2(
-            Phaser.Math.Between(0, AsteroidManager.maxVelocity),
-            Phaser.Math.Between(0, AsteroidManager.maxVelocity)
+            Phaser.Math.FloatBetween(
+                -1 * AsteroidManager.maxVelocity,
+                AsteroidManager.maxVelocity
+            ),
+            Phaser.Math.FloatBetween(
+                -1 * AsteroidManager.maxVelocity,
+                AsteroidManager.maxVelocity
+            )
         );
     }
 
-    private _getRandomAsteroidImage(scene: Scene) {
+    private _getRandomAsteroidImage(scene: Scene, portal: Phaser.Math.Vector2) {
         return scene.add
             .image(
-                0,
-                0,
+                portal.x,
+                portal.y,
                 AsteroidAssetManifest.paths[
                     Phaser.Math.Between(
                         0,
@@ -109,6 +143,9 @@ enum AsteroidSize {
 }
 
 export class Asteroid {
+    private static _loopBorderWidth: number = 50;
+    private _startTime: number;
+
     public constructor(
         private _asteroid: GameObjects.Image,
         private _size: AsteroidSize,
@@ -116,7 +153,44 @@ export class Asteroid {
         private _startLocation: Phaser.Math.Vector2
     ) {}
 
+    public set startTime(time: number) {
+        this._startTime = time;
+    }
+
     public setVisible(visible: boolean) {
         this._asteroid.visible = visible;
+    }
+
+    public update(time: number, _: number) {
+        const timeInMotion = time - this._startTime;
+        const displacement = new Phaser.Math.Vector2()
+            .copy(this._startLocation)
+            .add(
+                new Phaser.Math.Vector2(
+                    this._velocity.x * timeInMotion,
+                    this._velocity.y * timeInMotion
+                )
+            );
+
+        const reducedX =
+            (displacement.x % (config.width + Asteroid._loopBorderWidth)) -
+            Asteroid._loopBorderWidth / 2;
+        const reducedY =
+            (displacement.y % (config.height + Asteroid._loopBorderWidth)) -
+            Asteroid._loopBorderWidth / 2;
+
+        if (reducedX < 0 - Asteroid._loopBorderWidth / 2) {
+            this._asteroid.x =
+                config.width + Asteroid._loopBorderWidth + reducedX;
+        } else {
+            this._asteroid.x = reducedX;
+        }
+
+        if (reducedY < 0 - Asteroid._loopBorderWidth / 2) {
+            this._asteroid.y =
+                config.height + Asteroid._loopBorderWidth + reducedY;
+        } else {
+            this._asteroid.y = reducedY;
+        }
     }
 }
