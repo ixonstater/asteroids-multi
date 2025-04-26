@@ -1,4 +1,4 @@
-import { Scene } from "phaser";
+import { GameObjects, Scene } from "phaser";
 import { InputState } from "../controls/Input";
 import { config } from "../main";
 
@@ -18,6 +18,10 @@ export const ShipAssetManifest = {
         path: "bullet.png",
         bodyPath: "bodies/bullet.json",
     },
+    explosionAsset: {
+        path: "explosion.png",
+        animationKey: "explosion",
+    },
 };
 
 export class Ship {
@@ -28,7 +32,7 @@ export class Ship {
     );
     private _velocity: Phaser.Math.Vector2 = new Phaser.Math.Vector2();
     private _maxVelocity: number = 3;
-    private _ship: Phaser.GameObjects.Image;
+    private _ship: GameObjects.Image;
     private static _acceleration = 0.00008;
     private static _velocityDeltaReducer = 0.09;
     private static _baseRotation = Math.PI / 2;
@@ -52,6 +56,10 @@ export class Ship {
             )
             .setRotation(Ship._baseRotation)
             .setScale(0.3, 0.3);
+    }
+
+    public get ship(): GameObjects.Image {
+        return this._ship;
     }
 
     public get direction() {
@@ -90,5 +98,9 @@ export class Ship {
 
         this._ship.x += this._velocity.x * delta * Ship._velocityDeltaReducer;
         this._ship.y += this._velocity.y * delta * Ship._velocityDeltaReducer;
+    }
+
+    public discard() {
+        this._ship.destroy();
     }
 }

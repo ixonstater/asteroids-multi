@@ -36,18 +36,23 @@ export class AsteroidManager {
     private __asteroidSpawnEventDuration: number = 6000;
     public static maxVelocity: number = 0.2;
 
-    public constructor(scene: Scene) {
+    public constructor(private _scene: Scene) {
         this._spawner = new AsteroidSpawner();
-        this._portal = scene.add
+        this._portal = this._scene.add
             .ellipse(0, 0, 100, 100, 0x0000ff)
             .setVisible(false);
     }
 
-    public update(time: number, delta: number, scene: Scene) {
+    public get asteroids(): Map<number, Asteroid> {
+        return this._asteroids;
+    }
+
+    public update(time: number, delta: number) {
         // Start spawning new asteroids
         if (this._asteroids.size < 1 && this._asteroidSpawnEventComplete) {
-            const [asteroids, portalLocation] =
-                this._spawner.createAsteroids(scene);
+            const [asteroids, portalLocation] = this._spawner.createAsteroids(
+                this._scene
+            );
             this._portal.x = portalLocation.x;
             this._portal.y = portalLocation.y;
             this._portal.setVisible(true);
@@ -84,7 +89,7 @@ export class AsteroidManager {
 
 // Eventually most of this classes functionality will be moved to the server
 export class AsteroidSpawner {
-    private _level: number = 1;
+    private _level: number = 10;
 
     public createAsteroids(
         scene: Scene
@@ -168,6 +173,10 @@ export class Asteroid {
         private _startLocation: Phaser.Math.Vector2
     ) {
         _asteroid.setScale(Asteroid._asteroidScale[this._size]);
+    }
+
+    public get asteroidObject(): GameObjects.Image {
+        return this._asteroid;
     }
 
     public set startTime(time: number) {

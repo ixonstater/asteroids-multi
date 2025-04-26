@@ -15,7 +15,7 @@
 	"fixtures": [
 		{
 			"label": "",
-			"isSensor": false,
+			"isSensor": true,
 			"vertices": [
 				[
 					{

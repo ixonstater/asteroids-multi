@@ -23,6 +23,15 @@ export class Preloader extends Scene {
             }
         );
 
+        this.load.spritesheet(
+            ShipAssetManifest.explosionAsset.path,
+            ShipAssetManifest.explosionAsset.path,
+            {
+                frameWidth: 117,
+                frameHeight: 100,
+            }
+        );
+
         for (const path of ShipAssetManifest.shipAssets.paths) {
             this.load.image(path, path);
         }
@@ -44,6 +53,19 @@ export class Preloader extends Scene {
             this.load.image(asteroid.key, asteroid.imagePath);
             this.load.json(asteroid.key, asteroid.bodyPath);
         }
+
+        this.load.addListener("complete", this.loadAnimations.bind(this));
+    }
+
+    loadAnimations() {
+        this.anims.create({
+            key: ShipAssetManifest.explosionAsset.animationKey,
+            frames: this.anims.generateFrameNumbers(
+                ShipAssetManifest.explosionAsset.path
+            ),
+            frameRate: 15,
+            repeat: 0,
+        });
     }
 
     create() {

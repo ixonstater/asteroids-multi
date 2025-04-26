@@ -10,6 +10,7 @@ export class BulletManager {
     // Bullets to check for collision / delete
     private _ownedBullets: Map<number, Bullet> = new Map();
     private _lastBulletAddedTime: number = 0;
+    private _gameOver: boolean = false;
     private static bulletAddMinimumInterval: number = 150;
 
     public constructor(
@@ -17,6 +18,14 @@ export class BulletManager {
         private _ship: Ship,
         private _scene: Scene
     ) {}
+
+    public get ownedBulletObjects(): Map<number, Bullet> {
+        return this._ownedBullets;
+    }
+
+    public set gameOver(gameOver: boolean) {
+        this._gameOver = gameOver;
+    }
 
     private _addBullet(time: number, _: number) {
         const bullet = new Bullet(
@@ -33,7 +42,8 @@ export class BulletManager {
         if (
             time - this._lastBulletAddedTime >
                 BulletManager.bulletAddMinimumInterval &&
-            this._inputState.firing
+            this._inputState.firing &&
+            !this._gameOver
         ) {
             this._addBullet(time, delta);
             this._lastBulletAddedTime = time;
@@ -60,6 +70,10 @@ class Bullet {
 
     public get position() {
         return new Phaser.Math.Vector2(this._bullet.x, this._bullet.y);
+    }
+
+    public get bulletObject() {
+        return this._bullet;
     }
 
     constructor(
