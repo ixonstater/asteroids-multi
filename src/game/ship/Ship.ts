@@ -27,7 +27,7 @@ export class Ship {
     private _velocity: Phaser.Math.Vector2 = new Phaser.Math.Vector2();
     private _maxVelocity: number = 3;
     private _ship: Phaser.GameObjects.Image;
-    private static _acceleration = 0.00002;
+    private static _acceleration = 0.00008;
     private static _velocityDeltaReducer = 0.09;
     private static _baseRotation = Math.PI / 2;
 

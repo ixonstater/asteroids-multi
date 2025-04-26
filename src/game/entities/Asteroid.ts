@@ -2,12 +2,13 @@ import { GameObjects, Scene } from "phaser";
 import { config } from "../main";
 
 export const AsteroidAssetManifest = {
-    paths: [
+    imagePaths: [
         "asteroid_1.png",
         "asteroid_2.png",
         "asteroid_3.png",
         "asteroid_4.png",
     ],
+    bodyPaths: ["bodies/asteroid_4.json"],
 };
 
 export class AsteroidManager {
@@ -30,10 +31,8 @@ export class AsteroidManager {
     public update(time: number, delta: number, scene: Scene) {
         // Start spawning new asteroids
         if (this._asteroids.size < 1 && this._asteroidSpawnEventComplete) {
-            const [asteroids, portalLocation] = this._spawner.createAsteroids(
-                scene,
-                time
-            );
+            const [asteroids, portalLocation] =
+                this._spawner.createAsteroids(scene);
             this._portal.x = portalLocation.x;
             this._portal.y = portalLocation.y;
             this._portal.setVisible(true);
@@ -70,11 +69,10 @@ export class AsteroidManager {
 
 // Eventually most of this classes functionality will be moved to the server
 export class AsteroidSpawner {
-    private _level: number = 3;
+    private _level: number = 10;
 
     public createAsteroids(
-        scene: Scene,
-        time: number
+        scene: Scene
     ): [Array<Asteroid>, Phaser.Math.Vector2] {
         const portalLocation = this._pickPortalLocation();
         const asteroids: Array<Asteroid> = [];
@@ -125,10 +123,10 @@ export class AsteroidSpawner {
             .image(
                 portal.x,
                 portal.y,
-                AsteroidAssetManifest.paths[
+                AsteroidAssetManifest.imagePaths[
                     Phaser.Math.Between(
                         0,
-                        AsteroidAssetManifest.paths.length - 1
+                        AsteroidAssetManifest.imagePaths.length - 1
                     )
                 ]
             )
@@ -137,13 +135,14 @@ export class AsteroidSpawner {
 }
 
 enum AsteroidSize {
-    AsteroidSmall,
-    AsteroidMedium,
-    AsteroidLarge,
+    AsteroidSmall = 0,
+    AsteroidMedium = 1,
+    AsteroidLarge = 2,
 }
 
 export class Asteroid {
-    private static _loopBorderWidth: number = 50;
+    private static readonly _loopBorderWidth: number = 50;
+    private static readonly _asteroidScale: number[] = [0.3, 0.5, 0.8];
     private _startTime: number;
 
     public constructor(
@@ -151,7 +150,9 @@ export class Asteroid {
         private _size: AsteroidSize,
         private _velocity: Phaser.Math.Vector2,
         private _startLocation: Phaser.Math.Vector2
-    ) {}
+    ) {
+        _asteroid.setScale(Asteroid._asteroidScale[this._size]);
+    }
 
     public set startTime(time: number) {
         this._startTime = time;

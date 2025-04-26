@@ -23,6 +23,13 @@ const gameConfig: Phaser.Types.Core.GameConfig = {
     scene: [Boot, Preloader, MainMenu, MainGame, GameOver],
     antialias: true,
     antialiasGL: true,
+    physics: {
+        default: "matter",
+        matter: {
+            debug: true,
+            gravity: new Phaser.Math.Vector2(0, 0),
+        },
+    },
 };
 
 const StartGame = (parent: string) => {

@@ -32,8 +32,12 @@ export class Preloader extends Scene {
             ShipAssetManifest.bulletAsset.path
         );
 
-        for (const path of AsteroidAssetManifest.paths) {
+        for (const path of AsteroidAssetManifest.imagePaths) {
             this.load.image(path, path);
+        }
+
+        for (const path of AsteroidAssetManifest.bodyPaths) {
+            this.load.json(path, path);
         }
     }
 
@@ -41,4 +45,3 @@ export class Preloader extends Scene {
         this.scene.start("MainMenu");
     }
 }
-

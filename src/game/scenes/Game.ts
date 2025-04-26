@@ -1,7 +1,7 @@
 import { Scene } from "phaser";
 import { EventBus } from "../EventBus";
 import { InputState } from "../controls/Input";
-import { AsteroidManager } from "../entities/Asteroid";
+import { AsteroidAssetManifest, AsteroidManager } from "../entities/Asteroid";
 import { BulletManager } from "../entities/Bullet";
 import { config } from "../main";
 import { Ship } from "../ship/Ship";
@@ -49,14 +49,26 @@ export class Game extends Scene {
         );
 
         this._asteroidManager = new AsteroidManager(this);
+        this.experiment();
 
         EventBus.emit("current-scene-ready", this);
+    }
+
+    public experiment() {
+        const shape = this.cache.json.get(AsteroidAssetManifest.bodyPaths[0]);
+        this.matter.add.image(
+            300,
+            200,
+            AsteroidAssetManifest.imagePaths[3],
+            undefined,
+            { shape }
+        );
     }
 
     public override update(time: number, delta: number) {
         this._ship.update(time, delta);
         this._bulletManager.update(time, delta);
-        this._asteroidManager.update(time, delta, this);
+        // this._asteroidManager.update(time, delta, this);
     }
 
     public changeScene() {
