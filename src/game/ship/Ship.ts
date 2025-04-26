@@ -12,9 +12,11 @@ export const ShipAssetManifest = {
             "ship_yellow.png",
             "ship_blue.png",
         ],
+        bodyPath: "bodies/ship.json",
     },
     bulletAsset: {
         path: "bullet.png",
+        bodyPath: "bodies/bullet.json",
     },
 };
 
@@ -36,8 +38,18 @@ export class Ship {
         private _scene: Scene,
         private _shipImagePath: string
     ) {
-        this._ship = this._scene.add
-            .image(config.width / 2, config.height / 2, this._shipImagePath)
+        this._ship = this._scene.matter.add
+            .image(
+                config.width / 2,
+                config.height / 2,
+                this._shipImagePath,
+                undefined,
+                {
+                    shape: this._scene.cache.json.get(
+                        ShipAssetManifest.shipAssets.bodyPath
+                    ),
+                }
+            )
             .setRotation(Ship._baseRotation)
             .setScale(0.3, 0.3);
     }

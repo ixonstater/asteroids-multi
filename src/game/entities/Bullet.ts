@@ -74,11 +74,17 @@ class Bullet {
         _startPosition.y =
             _startPosition.y + _direction.y * Bullet._spawnForwardOffset;
 
-        this._bullet = scene.add
+        this._bullet = scene.matter.add
             .image(
                 _startPosition.x,
                 _startPosition.y,
-                ShipAssetManifest.bulletAsset.path
+                ShipAssetManifest.bulletAsset.path,
+                undefined,
+                {
+                    shape: scene.cache.json.get(
+                        ShipAssetManifest.bulletAsset.bodyPath
+                    ),
+                }
             )
             .setRotation(_direction.angle() + Bullet._baseRotation)
             .setScale(0.25)

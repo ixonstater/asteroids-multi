@@ -2,13 +2,28 @@ import { GameObjects, Scene } from "phaser";
 import { config } from "../main";
 
 export const AsteroidAssetManifest = {
-    imagePaths: [
-        "asteroid_1.png",
-        "asteroid_2.png",
-        "asteroid_3.png",
-        "asteroid_4.png",
+    asteroids: [
+        {
+            key: "asteroid1",
+            imagePath: "asteroid_1.png",
+            bodyPath: "bodies/asteroid_1.json",
+        },
+        {
+            key: "asteroid2",
+            imagePath: "asteroid_2.png",
+            bodyPath: "bodies/asteroid_2.json",
+        },
+        {
+            key: "asteroid3",
+            imagePath: "asteroid_3.png",
+            bodyPath: "bodies/asteroid_3.json",
+        },
+        {
+            key: "asteroid4",
+            imagePath: "asteroid_4.png",
+            bodyPath: "bodies/asteroid_4.json",
+        },
     ],
-    bodyPaths: ["bodies/asteroid_4.json"],
 };
 
 export class AsteroidManager {
@@ -69,7 +84,7 @@ export class AsteroidManager {
 
 // Eventually most of this classes functionality will be moved to the server
 export class AsteroidSpawner {
-    private _level: number = 10;
+    private _level: number = 1;
 
     public createAsteroids(
         scene: Scene
@@ -119,17 +134,18 @@ export class AsteroidSpawner {
     }
 
     private _getRandomAsteroidImage(scene: Scene, portal: Phaser.Math.Vector2) {
-        return scene.add
-            .image(
-                portal.x,
-                portal.y,
-                AsteroidAssetManifest.imagePaths[
-                    Phaser.Math.Between(
-                        0,
-                        AsteroidAssetManifest.imagePaths.length - 1
-                    )
-                ]
-            )
+        const selectedAsteroidKey =
+            AsteroidAssetManifest.asteroids[
+                Phaser.Math.Between(
+                    0,
+                    AsteroidAssetManifest.asteroids.length - 1
+                )
+            ].key;
+
+        return scene.matter.add
+            .image(portal.x, portal.y, selectedAsteroidKey, undefined, {
+                shape: scene.cache.json.get(selectedAsteroidKey),
+            })
             .setVisible(false);
     }
 }

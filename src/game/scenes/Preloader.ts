@@ -26,18 +26,23 @@ export class Preloader extends Scene {
         for (const path of ShipAssetManifest.shipAssets.paths) {
             this.load.image(path, path);
         }
+        this.load.json(
+            ShipAssetManifest.shipAssets.bodyPath,
+            ShipAssetManifest.shipAssets.bodyPath
+        );
 
         this.load.image(
             ShipAssetManifest.bulletAsset.path,
             ShipAssetManifest.bulletAsset.path
         );
+        this.load.json(
+            ShipAssetManifest.bulletAsset.bodyPath,
+            ShipAssetManifest.bulletAsset.bodyPath
+        );
 
-        for (const path of AsteroidAssetManifest.imagePaths) {
-            this.load.image(path, path);
-        }
-
-        for (const path of AsteroidAssetManifest.bodyPaths) {
-            this.load.json(path, path);
+        for (const asteroid of AsteroidAssetManifest.asteroids) {
+            this.load.image(asteroid.key, asteroid.imagePath);
+            this.load.json(asteroid.key, asteroid.bodyPath);
         }
     }
 
