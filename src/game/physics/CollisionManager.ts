@@ -40,7 +40,9 @@ export class CollisionManager {
                         bullet.bulletObject.body as MatterJS.BodyType,
                         asteroid.asteroidObject.body as MatterJS.BodyType,
                         null as any
-                    )
+                    ) &&
+                    // Don't allow shooting asteroids that can't break the ship
+                    asteroid.asteroidObject.visible
                 ) {
                     bulletAsteroidCollisions.push({
                         bulletId,
@@ -64,7 +66,8 @@ export class CollisionManager {
                 null as any
             );
 
-            if (collision) {
+            // Don't blow up the ship if the portal spawns on it
+            if (collision && asteroid.asteroidObject.visible) {
                 return true;
             }
         }

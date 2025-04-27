@@ -74,7 +74,7 @@ export class BulletManager {
 class Bullet {
     private _bullet: Phaser.GameObjects.Image;
     private static _baseRotation = Math.PI / 2;
-    private _bulletVelocity = 0.4;
+    private _bulletVelocity = 0.6;
     private static _spawnForwardOffset = 3;
 
     public get position() {

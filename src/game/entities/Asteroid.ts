@@ -97,7 +97,7 @@ export class AsteroidManager {
 
 // Eventually most of this classes functionality will be moved to the server
 export class AsteroidSpawner {
-    private _level: number = 10;
+    private _level: number = 1;
 
     public createAsteroids(
         scene: Scene
@@ -171,7 +171,7 @@ enum AsteroidSize {
 
 export class Asteroid {
     private static readonly _loopBorderWidth: number = 50;
-    private static readonly _asteroidScale: number[] = [0.3, 0.5, 0.8];
+    private static readonly _asteroidScale: number[] = [0.3, 0.5, 0.7];
     private _startTime: number;
 
     public constructor(
