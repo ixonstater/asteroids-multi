@@ -60,6 +60,15 @@ export class BulletManager {
             bullet.update(time, delta);
         }
     }
+
+    public onBulletCollision(bulletId: number) {
+        const bullet = this._bullets.get(bulletId);
+        if (bullet) {
+            bullet.discard();
+            this._bullets.delete(bulletId);
+            this._ownedBullets.delete(bulletId);
+        }
+    }
 }
 
 class Bullet {

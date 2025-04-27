@@ -69,7 +69,7 @@ export class Game extends Scene {
 
         if (!this._gameOver) {
             this._ship?.update(time, delta);
-            this._gameOver = this._collisionManager.update(time, delta);
+            this._gameOver = this._collisionManager.update();
 
             if (this._gameOver) {
                 this._onGameOver();

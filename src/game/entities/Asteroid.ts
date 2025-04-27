@@ -85,6 +85,14 @@ export class AsteroidManager {
             this._asteroidSpawnEventComplete = true;
         }
     }
+
+    public onAsteroidCollision(asteroidId: number) {
+        const asteroid = this._asteroids.get(asteroidId);
+        if (asteroid) {
+            asteroid.discard();
+            this._asteroids.delete(asteroidId);
+        }
+    }
 }
 
 // Eventually most of this classes functionality will be moved to the server
@@ -218,5 +226,9 @@ export class Asteroid {
         } else {
             this._asteroid.y = reducedY;
         }
+    }
+
+    public discard() {
+        this._asteroid.destroy();
     }
 }
