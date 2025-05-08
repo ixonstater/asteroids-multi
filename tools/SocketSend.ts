@@ -12,9 +12,13 @@ class SocketSend {
                 this._argRecord[this._portArg]
             }`
         );
-        this._sendReceiveLoop(socket);
+
+        socket.addEventListener("open", () => {
+            this._sendReceiveLoop(socket);
+        });
+
         socket.addEventListener("message", (event: any) => {
-            console.log(event);
+            console.log(event.data);
         });
     }
 
@@ -31,6 +35,11 @@ class SocketSend {
     }
 
     private _parseToByteArray(input: string): string {
+        // Option to send a basic string, just prefix it with an "f"
+        if (input[0] === "f") {
+            return input.slice(1);
+        }
+
         return input
             .split(",")
             .map((val: string) => {
