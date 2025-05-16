@@ -6,12 +6,22 @@
             "type": "node",
             "request": "launch",
             "runtimeExecutable": "ts-node",
-            "runtimeArgs": ["--transpile-only"],
+            "runtimeArgs": [
+                "--transpile-only"
+            ],
             "program": "${workspaceRoot}/tools/SocketSend.ts",
             "cwd": "${workspaceRoot}",
             "internalConsoleOptions": "openOnSessionStart",
-            "skipFiles": ["<node_internals>/**", "node_modules/**"],
-            "args": ["port", "8080", "address", "127.0.0.1"]
+            "skipFiles": [
+                "<node_internals>/**",
+                "node_modules/**"
+            ],
+            "args": [
+                "port",
+                "8081",
+                "address",
+                "127.0.0.1"
+            ]
         }
     ]
 }
