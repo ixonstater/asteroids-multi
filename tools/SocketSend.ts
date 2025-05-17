@@ -2,19 +2,22 @@ const readline = require("readline");
 const WebSocketActual = require("ws");
 
 // Sample serialized messages
-// Terminator: 59
-// Float code: 0
-// String code: 1
-// Join: 1,106,59,1,71,59
+// Terminator: 3B
+// Escape: 5C
+// Float code: 00
+// String code: 01
+// Join: 01,6A,3B,01,47,3B
+// Ship Update: 01,73,3B,00,83,00,C8,42,3B,00,83,00,C8,42,3B,00,83,00,C8,42,3B,00,83,00,C8,42,3B,01,id_bytes_len_4,3B
 
 class SocketSend {
     private readonly _portArg: string = "port";
     private readonly _address: string = "address";
-    constructor(private _argRecord: Record<string, string>) { }
+    constructor(private _argRecord: Record<string, string>) {}
 
     public start(): void {
         const socket = new WebSocketActual(
-            `ws://${this._argRecord[this._address]}:${this._argRecord[this._portArg]
+            `ws://${this._argRecord[this._address]}:${
+                this._argRecord[this._portArg]
             }`
         );
 
@@ -48,7 +51,8 @@ class SocketSend {
         return input
             .split(",")
             .map((val: string) => {
-                return String.fromCharCode(Number.parseInt(val));
+                console.log(val, " ", Number.parseInt(val, 16));
+                return String.fromCharCode(Number.parseInt(val, 16));
             })
             .join("");
     }
