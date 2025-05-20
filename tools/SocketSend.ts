@@ -51,7 +51,6 @@ class SocketSend {
         return input
             .split(",")
             .map((val: string) => {
-                console.log(val, " ", Number.parseInt(val, 16));
                 return String.fromCharCode(Number.parseInt(val, 16));
             })
             .join("");
