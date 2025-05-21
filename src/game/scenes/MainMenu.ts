@@ -95,8 +95,18 @@ export class MainMenu extends Scene {
     }
 
     private _changeScene() {
-        const data: InitGameData = { selectedShipPath: this._shipColorPath };
-        this.scene.start("Game", data);
+        const socket: WebSocket = new WebSocket(config.socketUrl);
+        socket.addEventListener("open", (_) => {
+            const data: InitGameData = {
+                selectedShipPath: this._shipColorPath,
+                socket,
+            };
+            this.scene.start("Game", data);
+        });
+
+        socket.addEventListener("error", (event) => {
+            console.log("Message from server:", JSON.stringify(event));
+        });
     }
 }
 

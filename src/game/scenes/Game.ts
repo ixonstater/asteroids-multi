@@ -9,6 +9,7 @@ import { Ship, ShipAssetManifest } from "../ship/Ship";
 
 export type InitGameData = {
     selectedShipPath: string;
+    socket: WebSocket;
 };
 
 export class Game extends Scene {
@@ -91,9 +92,5 @@ export class Game extends Scene {
                 0
             )
             .play(ShipAssetManifest.explosionAsset.animationKey);
-    }
-
-    public changeScene() {
-        this.scene.start("GameOver");
     }
 }

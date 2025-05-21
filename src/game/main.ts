@@ -9,6 +9,7 @@ export const config = {
     width: 750,
     height: 400,
     isMobile: navigator.maxTouchPoints > 1,
+    socketUrl: "ws://localhost:8081",
 };
 
 //  Find out more information about the Game Config at:
