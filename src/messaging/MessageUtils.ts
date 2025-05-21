@@ -4,6 +4,8 @@ import {
     MessageSegmentType,
 } from "./GenericMessage";
 
+import { Buffer } from "buffer";
+
 // Basic format for messages is (type | segment | terminator)...
 // Natural terminator and escape characters must be escaped
 export class MessageUtils {

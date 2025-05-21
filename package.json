@@ -28,6 +28,7 @@
         "soc": "ts-node tools/SocketSend.ts port 8081 address 127.0.0.1"
     },
     "dependencies": {
+        "buffer": "^6.0.3",
         "phaser": "^3.88.2",
         "react": "^18.2.0",
         "react-dom": "^18.2.0"

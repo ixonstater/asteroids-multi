@@ -6,7 +6,8 @@ export class InboundMessageProcessor {
         this._socket.addEventListener("message", this.routeMessage);
     }
 
-    public routeMessage(ev: MessageEvent) {
-        console.log(ev.data);
+    public async routeMessage(ev: MessageEvent) {
+        const data: Blob = ev.data;
+        console.log(await data.arrayBuffer());
     }
 }
