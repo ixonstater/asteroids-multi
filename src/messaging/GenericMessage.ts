@@ -1,6 +1,6 @@
 export class GenericMessage {
-    private _stringMessages: MessageSegment<string>[] = [];
-    public get stringMessages(): MessageSegment<string>[] {
+    private _stringMessages: MessageSegment<String>[] = [];
+    public get stringMessages(): MessageSegment<String>[] {
         return this._stringMessages;
     }
 
@@ -9,19 +9,21 @@ export class GenericMessage {
         return this._floatMessages;
     }
 
-    public GenericMessage(
-        _stringMessages: MessageSegment<string>[],
-        _floatMessages: MessageSegment<number>[]
-    ) {
-        this._stringMessages = _stringMessages ?? [];
-        this._floatMessages = _floatMessages ?? [];
+    public static genericMessage(
+        _stringMessages: MessageSegment<String>[] | null,
+        _floatMessages: MessageSegment<number>[] | null
+    ): GenericMessage {
+        const genericMessage: GenericMessage = new GenericMessage();
+        genericMessage._stringMessages = _stringMessages ?? [];
+        genericMessage._floatMessages = _floatMessages ?? [];
+        return genericMessage;
     }
 }
 
-export class MessageCodes {
-    public readonly join: string = "j";
-    public readonly inboundShip: string = "s";
-    public readonly shipUpdate: string = "p";
+export class MessageTypeCodes {
+    public static readonly join: string = "j";
+    public static readonly inboundShip: string = "s";
+    public static readonly shipUpdate: string = "p";
 }
 
 export class MessageSegmentType {

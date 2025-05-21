@@ -30,7 +30,7 @@ export class MessageUtils {
     /**
      * Don't pass non-ascii characters here, you have been warned :)
      */
-    private static serializeString(str: string): number[] {
+    private static serializeString(str: String): number[] {
         const bytes = this.escapeSpecialCharacters(Buffer.from(str, "ascii"));
         bytes.unshift(MessageSegmentType.STRING);
         bytes.push(this.terminator);
@@ -108,15 +108,13 @@ export class MessageUtils {
         bytes: Buffer,
         byteCount: number
     ) {
-        if (type === 1) {
-            // MessageSegmentType.STRING
+        if (type === MessageSegmentType.STRING) {
             msg.stringMessages.push(
                 new MessageSegment<string>(
                     bytes.toString("ascii", 0, byteCount)
                 )
             );
-        } else if (type === 0) {
-            // MessageSegmentType.FLOAT
+        } else if (type === MessageSegmentType.FLOAT) {
             msg.floatMessages.push(
                 new MessageSegment<number>(bytes.readFloatLE(0))
             );
@@ -124,12 +122,8 @@ export class MessageUtils {
     }
 
     private static getMessageTypeFromByte(type: number): number {
-        if (type === 0) {
-            // MessageSegmentType.FLOAT
-            return 0;
-        } else if (type === 1) {
-            // MessageSegmentType.STRING
-            return 1;
+        if (type === 0 || type === 1) {
+            return type;
         }
         throw new MessageParseException(
             `Failed to parse data type from message byte: ${type}`

@@ -1,11 +1,13 @@
 import { Scene } from "phaser";
+import { InboundMessageProcessor } from "../../messaging/InboundMessageProcessor";
+import { OutboundMessageProcessor } from "../../messaging/OutboundMessageProcessor";
 import { EventBus } from "../EventBus";
 import { InputState } from "../controls/Input";
 import { AsteroidManager } from "../entities/Asteroid";
 import { BulletManager } from "../entities/Bullet";
 import { config } from "../main";
 import { CollisionManager } from "../physics/CollisionManager";
-import { Ship, ShipAssetManifest } from "../ship/Ship";
+import { Ship, ShipAssetManifest, ShipColorConversion } from "../ship/Ship";
 
 export type InitGameData = {
     selectedShipPath: string;
@@ -20,6 +22,10 @@ export class Game extends Scene {
     private _bulletManager: BulletManager;
     private _asteroidManager: AsteroidManager;
     private _collisionManager: CollisionManager;
+    private _outboundMessageProcessor: OutboundMessageProcessor =
+        new OutboundMessageProcessor();
+    private _inboundMessageProcessor: InboundMessageProcessor =
+        new InboundMessageProcessor();
     private _data: InitGameData;
     private _gameOver: boolean;
 
@@ -29,6 +35,12 @@ export class Game extends Scene {
 
     public init(data: InitGameData): void {
         this._data = data;
+        this._outboundMessageProcessor.socket = data.socket;
+        this._inboundMessageProcessor.setSocket(data.socket);
+
+        this._outboundMessageProcessor.sendJoin(
+            ShipColorConversion.shipColorFromAssetPath(data.selectedShipPath)
+        );
     }
 
     public create() {

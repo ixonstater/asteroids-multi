@@ -1,7 +1,6 @@
 import { AUTO, Game } from "phaser";
 import { Boot } from "./scenes/Boot";
 import { Game as MainGame } from "./scenes/Game";
-import { GameOver } from "./scenes/GameOver";
 import { MainMenu } from "./scenes/MainMenu";
 import { Preloader } from "./scenes/Preloader";
 
@@ -21,7 +20,7 @@ const gameConfig: Phaser.Types.Core.GameConfig = {
     parent: "game-container",
     backgroundColor: "#000000",
     canvasStyle: "border: 2px white solid;",
-    scene: [Boot, Preloader, MainMenu, MainGame, GameOver],
+    scene: [Boot, Preloader, MainMenu, MainGame],
     antialias: true,
     antialiasGL: true,
     physics: {

@@ -104,3 +104,70 @@ export class Ship {
         this._ship.destroy();
     }
 }
+
+export enum ShipColor {
+    RED = 0,
+    GREEN = 1,
+    FUCHSIA = 2,
+    PINK = 3,
+    YELLOW = 4,
+    BLUE = 5,
+}
+
+export class ShipColorConversion {
+    public static readonly SHIP_RED = "R";
+    public static readonly SHIP_GREEN = "G";
+    public static readonly SHIP_FUCHSIA = "F";
+    public static readonly SHIP_PINK = "P";
+    public static readonly SHIP_YELLOW = "Y";
+    public static readonly SHIP_BLUE = "B";
+
+    public static shipColorFromCode(code: string): ShipColor {
+        switch (code) {
+            case ShipColorConversion.SHIP_RED:
+                return ShipColor.RED;
+            case ShipColorConversion.SHIP_GREEN:
+                return ShipColor.GREEN;
+            case ShipColorConversion.SHIP_FUCHSIA:
+                return ShipColor.FUCHSIA;
+            case ShipColorConversion.SHIP_PINK:
+                return ShipColor.PINK;
+            case ShipColorConversion.SHIP_YELLOW:
+                return ShipColor.YELLOW;
+            case ShipColorConversion.SHIP_BLUE:
+                return ShipColor.BLUE;
+            default:
+                return ShipColor.RED;
+        }
+    }
+
+    public static colorCodeFromShipColor(color: ShipColor): string {
+        switch (color) {
+            case ShipColor.RED:
+                return ShipColorConversion.SHIP_RED;
+            case ShipColor.GREEN:
+                return ShipColorConversion.SHIP_GREEN;
+            case ShipColor.FUCHSIA:
+                return ShipColorConversion.SHIP_FUCHSIA;
+            case ShipColor.PINK:
+                return ShipColorConversion.SHIP_PINK;
+            case ShipColor.YELLOW:
+                return ShipColorConversion.SHIP_YELLOW;
+            case ShipColor.BLUE:
+                return ShipColorConversion.SHIP_BLUE;
+            default:
+                return ShipColorConversion.SHIP_RED;
+        }
+    }
+
+    public static shipColorFromAssetPath(path: string): ShipColor {
+        if (path.includes("red")) return ShipColor.RED;
+        if (path.includes("green")) return ShipColor.GREEN;
+        if (path.includes("fuchsia")) return ShipColor.FUCHSIA;
+        if (path.includes("pink")) return ShipColor.PINK;
+        if (path.includes("yellow")) return ShipColor.YELLOW;
+        if (path.includes("blue")) return ShipColor.BLUE;
+        // Default fallback
+        return ShipColor.RED;
+    }
+}
