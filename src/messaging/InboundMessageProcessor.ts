@@ -1,3 +1,7 @@
+import { Buffer } from "buffer";
+import { GenericMessage } from "./GenericMessage";
+import { MessageUtils } from "./MessageUtils";
+
 export class InboundMessageProcessor {
     private _socket: WebSocket;
 
@@ -8,6 +12,8 @@ export class InboundMessageProcessor {
 
     public async routeMessage(ev: MessageEvent) {
         const data: Blob = ev.data;
-        console.log(await data.arrayBuffer());
+        const buffer = await data.arrayBuffer();
+        const msg: GenericMessage = MessageUtils.deserialize(Buffer.from(buffer));
+        console.log(msg);
     }
 }

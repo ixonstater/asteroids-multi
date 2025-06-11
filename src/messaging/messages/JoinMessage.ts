@@ -14,10 +14,10 @@ export class JoinMessage {
     }
 
     public toRequest(): Uint8Array {
-        const stringSegments: MessageSegment<String>[] = [];
-        stringSegments.push(new MessageSegment<String>(MessageTypeCodes.join));
+        const stringSegments: MessageSegment<string>[] = [];
+        stringSegments.push(new MessageSegment<string>(MessageTypeCodes.join));
         stringSegments.push(
-            new MessageSegment<String>(
+            new MessageSegment<string>(
                 ShipColorConversion.colorCodeFromShipColor(this._shipColor)
             )
         );

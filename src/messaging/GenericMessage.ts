@@ -1,6 +1,6 @@
 export class GenericMessage {
-    private _stringMessages: MessageSegment<String>[] = [];
-    public get stringMessages(): MessageSegment<String>[] {
+    private _stringMessages: MessageSegment<string>[] = [];
+    public get stringMessages(): MessageSegment<string>[] {
         return this._stringMessages;
     }
 
@@ -10,7 +10,7 @@ export class GenericMessage {
     }
 
     public static genericMessage(
-        _stringMessages: MessageSegment<String>[] | null,
+        _stringMessages: MessageSegment<string>[] | null,
         _floatMessages: MessageSegment<number>[] | null
     ): GenericMessage {
         const genericMessage: GenericMessage = new GenericMessage();
